@@ -1,14 +1,9 @@
-# dieselsky
-Physical based sky rendering in go
+# Dieselsky
+>Physical based sky rendering in go
 
-#### package dieselfluid/atmosphere
+>This package allows you to create atmospheric renders into a disk in JPG format using GO!
 
-**package Atmosphere**
-
->This package allows you to create atmospheric renders with approximations for
-latitudes and longitudes and times of the year. Using a global decimal UTC time
-system. Setting the Standard Meridian offsets the decimal time rotation and allows
-you to work in local time.
+![Rim_Glow](atmosphere/etc/sky_37.jpg)
 
 > *Note: Atmosphere package assumes to be working
 in meters to include all physical phenomena including wavelengths astronomical measurements*
@@ -26,7 +21,7 @@ Electron Node dispatch requests
 
 Include options for detailed Rayleight / Mie Scatter and height configurations for complete control over the model for users to include all configurable options
 
-### Usage
+**API Usage**
 
 > Create a new atmosphere object and create textures
 ```
@@ -40,14 +35,14 @@ for i := 0; i < 10; i++ {
 }
 ```
 
-### Notes
+**Notes**
 - Next update will fix the celestial observer model. 
 - Fixed Mie Scattering Error where sun disk failed to render
 - Adjust Sky.Light.Lx.Flux settings for sun intensity. Default (20.5)
 - Adjust Mie Scattering Phase Function by tuning g variable, forward scatter coefficient
 - BetaR , BetaM correspond to the extinction coefficients in RGB tristimulus color space. Tune these vectors according to atmopsheric composition to affect atmospheric colors
 
-### Todo
+**Fixes**
 - Eliminate Negative View Vector Evaluations
 - Faciliate Parameter Tuning for the Atmosphere Package as a whole with JSON Configurations
 - Approximate depth integrals for Rayleigh Mie scattering with Pre-Packaged LUTs for algorithmic speedup
@@ -55,7 +50,7 @@ for i := 0; i < 10; i++ {
 - Implement Ozone Extinction
 
 
-### Table of Measurements
+**Table of Measurements**
 | phenomena | description | units | underlying units |
 | ----------| ----------- | ------| -----------------|
 | Flux      | Radiant Flux| Watts | kg m^2 s^-3      |
