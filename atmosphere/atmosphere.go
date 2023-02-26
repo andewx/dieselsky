@@ -13,7 +13,7 @@ import (
 	"github.com/andewx/dieselfluid/math/polar"
 	"github.com/andewx/dieselfluid/math/vector"
 	"github.com/andewx/dieselfluid/render/light"
-	"github.com/andewx/dieselfluid/sampler"
+	"github.com/andewx/sampler"
 )
 
 /*
@@ -38,24 +38,24 @@ type Domain struct {
 	max float32
 }
 
-//Maps a value with an associated domain to this Domain
+// Maps a value with an associated domain to this Domain
 func (m *Domain) Map(value float32, domain Domain) float32 {
 	r := domain.max - domain.min
 	norm := (r - value) / r
 	return m.min + norm*(m.max-m.min)
 }
 
-//Atmosphere Environment
+// Atmosphere Environment
 type Atmosphere struct {
 	Light light.Light
 	Spd   light.Spectrum
 	Sun   polar.Polar //Orbtial Solar System Earth 2 Sun Polar Coordinate
 	Earth *EarthCoords
 	Day   float32
-	Dir   vector.Vec //Euclidian Sun Direction
+	Dir   vector.Vec //Euclidian Sun Directio
 }
 
-//Allocates Default Data Structure and Solar Coords Structs
+// Allocates Default Data Structure and Solar Coords Structs
 func NewAtmosphere(lat float32, long float32) *Atmosphere {
 	sky := Atmosphere{}
 	sky.Earth = NewEarth(65.0, 0)
@@ -66,7 +66,7 @@ func NewAtmosphere(lat float32, long float32) *Atmosphere {
 	return &sky
 }
 
-//Initialize sun positional reference coordinates in terms of polar coordinates
+// Initialize sun positional reference coordinates in terms of polar coordinates
 func (sky *Atmosphere) InitPosition(absDay float32, inclinationOffset float32) error {
 	var err error
 	theta := (1 / 2 * PI) * absDay
@@ -78,7 +78,7 @@ func (sky *Atmosphere) InitPosition(absDay float32, inclinationOffset float32) e
 	return err
 }
 
-//Updates sun positional coordinates by rotating Azimuth & Polar coords by delta degrees
+// Updates sun positional coordinates by rotating Azimuth & Polar coords by delta degrees
 func (sky *Atmosphere) UpdatePosition(delta float32) error {
 	var err error
 	theta := common.DEG2RAD * delta
@@ -90,15 +90,15 @@ func (sky *Atmosphere) UpdatePosition(delta float32) error {
 	return err
 }
 
-//Creates texture from from computed atmosphere, non-clamping allows for HDR storage
+// Creates texture from from computed atmosphere, non-clamping allows for HDR storage
 func (sky *Atmosphere) CreateTexture(width int, height int, clamp bool, filename string) {
 	fmt.Printf("Processing file:%s\n", filename)
 	rgbs := sky.ComputeAtmosphere(width, height) //pre-normalized (non-hdr)
 	ImageFromPixels(rgbs, width, height, clamp, 0xff, filename)
 }
 
-//Creates 6-textures from from computed atmosphere, non-clamping allows for HDR storage
-//width and height are the per texture width height values of the image size
+// Creates 6-textures from from computed atmosphere, non-clamping allows for HDR storage
+// width and height are the per texture width height values of the image size
 func (sky *Atmosphere) CreateEnvBox(width int, height int, clamp bool) {
 	wd, _ := os.Getwd()
 	fmt.Printf("Working Dir: %s\n", wd)
@@ -138,7 +138,7 @@ func (sky *Atmosphere) CreateEnvBox(width int, height int, clamp bool) {
 
 }
 
-//Utility function creates an image from a set of pixels
+// Utility function creates an image from a set of pixels
 func ImageFromPixels(pixels []vector.Vec, width int, height int, clamp bool, alpha uint8, filename string) {
 	corner := image.Point{0, 0}
 	bottom := image.Point{width, height}
@@ -192,8 +192,8 @@ func ImageFromPixels(pixels []vector.Vec, width int, height int, clamp bool, alp
 	}
 }
 
-//Maps texel coordinates to spherical coordinate sampler values (-1,1) and stores
-//resultant map in single texture.
+// Maps texel coordinates to spherical coordinate sampler values (-1,1) and stores
+// resultant map in single texture.
 func (sky *Atmosphere) ComputeAtmosphere(uSampleDomain int, vSampleDomain int) []vector.Vec {
 	sizeT := uSampleDomain * vSampleDomain
 	tex := make([]vector.Vec, sizeT+1)
@@ -216,7 +216,7 @@ func (sky *Atmosphere) ComputeAtmosphere(uSampleDomain int, vSampleDomain int) [
 	return tex
 }
 
-//Maps texel coordinates to spherical coordinate sampler values (-1,1) and stores
+// Maps texel coordinates to spherical coordinate sampler values (-1,1) and stores
 func (sky *Atmosphere) ComputeRegion(uSampleDomain int, vSampleDomain int, x_corner int, y_corner int, width int, height int) []vector.Vec {
 	sizeT := width * height
 	tex := make([]vector.Vec, sizeT+1)
@@ -238,8 +238,8 @@ func (sky *Atmosphere) ComputeRegion(uSampleDomain int, vSampleDomain int, x_cor
 	return tex
 }
 
-//Given a sampling vector and a viewing direction calculate RGB stimulus return
-//Based on the Attenuation/Mie Phase Scatter/RayleighScatter Terms
+// Given a sampling vector and a viewing direction calculate RGB stimulus return
+// Based on the Attenuation/Mie Phase Scatter/RayleighScatter Terms
 func (sky *Atmosphere) VolumetricScatterRay(sample vector.Vec, view vector.Vec) vector.Vec {
 
 	if sample[2] < 0.0 {
