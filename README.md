@@ -6,15 +6,14 @@
 ## Installation
 
 ```
-cd <project_dir>/gosky
 go build
-./gosky [options] <height> <width> <clamped> <prefix>
+./dieselsky <height> <width> <clamped> <prefix>
 ```
 
 For example
 
 ```
-./gosky 4096 4096 true dome
+./dieselsky 4096 4096 true dome
 ```
 
 ![Rim_Glow](preview.jpg)
