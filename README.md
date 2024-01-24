@@ -3,7 +3,21 @@
 
 >This package allows you to create atmospheric renders into a disk in JPG format using GO!
 
-![Rim_Glow](atmosphere/etc/sky_37.jpg)
+## Installation
+
+```
+cd <project_dir>/gosky
+go build
+./gosky [options] <height> <width> <clamped> <prefix>
+```
+
+For example
+
+```
+./gosky 4096 4096 true dome
+```
+
+![Rim_Glow](preview.jpg)
 
 > *Note: Atmosphere package assumes to be working
 in meters to include all physical phenomena including wavelengths astronomical measurements*

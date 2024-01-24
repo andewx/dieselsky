@@ -1,7 +1,3 @@
-#### package dieselfluid/atmosphere
-
-**package Atmosphere**
-
 >This package allows you to create atmospheric renders with approximations for
 latitudes and longitudes and times of the year. Using a global decimal UTC time
 system. Setting the Standard Meridian offsets the decimal time rotation and allows
